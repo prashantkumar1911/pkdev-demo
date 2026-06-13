@@ -1,0 +1,48 @@
+---
+- name: Install Self Hosted Runner
+  hosts: all
+
+  tasks:
+
+    - name: Create Runner Directory
+      become: true
+      file:
+        path: /home/ubuntu/actions-runner
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Download Runner
+      become: true
+      become_user: ubuntu
+      get_url:
+        url: https://github.com/actions/runner/releases/download/v2.335.1/actions-runner-linux-x64-2.335.1.tar.gz
+        dest: /home/ubuntu/actions-runner/runner.tar.gz
+
+    - name: Extract Runner
+      become: true
+      become_user: ubuntu
+      unarchive:
+        src: /home/ubuntu/actions-runner/runner.tar.gz
+        dest: /home/ubuntu/actions-runner
+        remote_src: true
+
+    - name: Configure Runner
+      become: true
+      become_user: ubuntu
+      command:
+        cmd: "./config.sh --url https://github.com/prashantkumar1911/pkdev-demo --token {{ RUNNER_TOKEN }} --unattended"
+        chdir: /home/ubuntu/actions-runner
+
+    - name: Install runner service
+      become: true
+      command:
+        cmd: ./svc.sh install
+        chdir: /home/ubuntu/actions-runner
+
+    - name: Start runner service
+      become: true
+      command:
+        cmd: ./svc.sh start
+        chdir: /home/ubuntu/actions-runner

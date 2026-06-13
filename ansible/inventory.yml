@@ -1,0 +1,7 @@
+# Write ansible inventory file for the ec2 instance created by terraform in yml format. also this inventory file will use action runner.
+all:
+  hosts:
+    pkdev-ec2:
+      ansible_host: 18.206.199.171
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ~/.ssh/pkdev-tata-key
