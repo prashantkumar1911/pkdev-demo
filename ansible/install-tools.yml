@@ -1,0 +1,39 @@
+# Install required tools for docker image
+---
+- name: Install required tools for docker image
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+
+    - name: Install required tools
+      apt:
+        name:
+          - git
+          - curl
+          - docker.io
+          - unzip
+          - htop
+          - jq
+          - net-tools        
+        state: present
+        
+    - name: Add user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Start and enable docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Verify docker installation
+      command: docker --version
+      changed_when: false
