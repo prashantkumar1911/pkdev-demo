@@ -46,7 +46,8 @@ jobs:
         - name: Build Docker image
           run: docker build \
             -t ${{ vars.DOCKERHUB_USERNAME }}/pkdev-demo:${{ github.sha }} \
-            -t ${{ vars.DOCKERHUB_USERNAME }}/pkdev-demo:latest .
+            -t ${{ vars.DOCKERHUB_USERNAME }}/pkdev-demo:latest \
+            .
 
         - name: Log in to DockerHub
           uses: docker/login-action@v4
